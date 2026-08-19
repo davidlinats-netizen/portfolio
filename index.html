@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Daviid is a video editor and content strategist creating high-retention short-form content, motion graphics, and polished long-form edits." />
+  <title>Daviid | Video Editor & Content Strategist</title>
+  <style>
+    :root{--bg:#0a0a0a;--surface:#111;--surface2:#171717;--text:#f5f5f5;--muted:#9b9b9b;--line:#262626;--accent:#d8ff45;--max:1180px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(calc(100% - 40px),var(--max));margin:auto}
+    nav{position:fixed;top:0;left:0;right:0;z-index:10;background:rgba(10,10,10,.78);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{height:72px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-weight:800;letter-spacing:-.04em;font-size:20px}.logo span{color:var(--accent)}
+    .links{display:flex;gap:28px;color:#aaa;font-size:14px}.links a:hover{color:#fff}
+    .nav-cta{background:#fff;color:#000;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:700}
+    .hero{min-height:100vh;display:grid;align-items:center;padding:130px 0 80px;position:relative;overflow:hidden}
+    .hero:before{content:"";position:absolute;width:520px;height:520px;background:var(--accent);filter:blur(180px);opacity:.08;right:-180px;top:100px;border-radius:50%}
+    .eyebrow{color:var(--accent);font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;margin-bottom:24px}
+    h1{font-size:clamp(52px,8vw,104px);line-height:.92;letter-spacing:-.065em;max-width:950px}
+    h1 em{font-style:normal;color:#777}
+    .hero-copy{max-width:620px;color:#aaa;font-size:18px;margin:30px 0 36px}
+    .actions{display:flex;gap:12px;flex-wrap:wrap}.btn{padding:14px 20px;border-radius:999px;font-weight:750;font-size:14px}.primary{background:var(--accent);color:#090909}.secondary{border:1px solid var(--line);color:#ddd}.secondary:hover{border-color:#555}
+    .ticker{margin-top:80px;padding-top:22px;border-top:1px solid var(--line);display:flex;gap:36px;flex-wrap:wrap;color:#666;font-size:12px;text-transform:uppercase;letter-spacing:.12em}
+    section{padding:110px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:42px}.kicker{color:#777;font-size:12px;text-transform:uppercase;letter-spacing:.14em}.section-title{font-size:clamp(36px,5vw,64px);letter-spacing:-.055em;line-height:.98;margin-top:10px}.section-desc{max-width:390px;color:#8d8d8d;font-size:15px}
+    .work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.work{min-height:430px;border:1px solid var(--line);border-radius:20px;background:var(--surface);overflow:hidden;position:relative;transition:.25s transform,.25s border-color}.work:hover{transform:translateY(-5px);border-color:#454545}.visual{height:300px;background:radial-gradient(circle at 65% 25%,#333,transparent 28%),linear-gradient(135deg,#1a1a1a,#090909);display:flex;align-items:center;justify-content:center;position:relative}.visual:after{content:"▶";width:58px;height:58px;border:1px solid #555;border-radius:50%;display:grid;place-items:center;color:#ddd;font-size:17px;padding-left:3px}.tag{position:absolute;left:18px;top:18px;background:rgba(0,0,0,.6);border:1px solid #444;border-radius:999px;padding:6px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.12em}.work-info{padding:22px}.work-info h3{font-size:21px;letter-spacing:-.025em}.work-info p{color:#777;font-size:13px;margin-top:7px}
+    .services{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.service{padding:30px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:220px}.num{color:var(--accent);font-size:12px;font-weight:800}.service h3{font-size:23px;margin:54px 0 8px}.service p{color:#777;font-size:14px;max-width:280px}
+    .about{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}.about-copy{font-size:25px;letter-spacing:-.025em;line-height:1.25}.about-copy span{color:#777}.facts{border-top:1px solid var(--line)}.fact{display:flex;justify-content:space-between;padding:17px 0;border-bottom:1px solid var(--line);color:#888;font-size:14px}.fact strong{color:#eee;font-weight:600}
+    .contact{background:#f2f2ee;color:#0b0b0b;border-radius:28px;padding:70px}.contact .kicker{color:#777}.contact h2{font-size:clamp(42px,6vw,78px);line-height:.95;letter-spacing:-.06em;max-width:780px;margin:16px 0 28px}.contact p{color:#555;max-width:480px;margin-bottom:30px}.contact .primary{background:#0b0b0b;color:#fff}.contact .secondary{border-color:#ccc;color:#222}
+    footer{padding:32px 0 45px;color:#666;font-size:12px;display:flex;justify-content:space-between;gap:20px}
+    @media(max-width:800px){.links{display:none}.wrap{width:min(calc(100% - 28px),var(--max))}.hero{padding-top:120px}.work-grid,.services,.about{grid-template-columns:1fr}.section-head{display:block}.section-desc{margin-top:18px}.visual{height:260px}.contact{padding:42px 28px}.about{gap:42px}.ticker{gap:18px}}
+  </style>
+</head>
+<body>
+  <nav><div class="wrap nav"><a class="logo" href="#top">DAVIID<span>.</span></a><div class="links"><a href="#work">Work</a><a href="#services">Services</a><a href="#about">About</a></div><a class="nav-cta" href="#contact">Let's talk</a></div></nav>
+  <main id="top">
+    <section class="hero"><div class="wrap"><div class="eyebrow">Video Editor · Content Strategist</div><h1>I edit videos that <em>earn attention.</em></h1><p class="hero-copy">I turn raw footage into sharp, engaging content built for modern audiences, from fast-paced short-form edits to polished motion graphics and long-form storytelling.</p><div class="actions"><a class="btn primary" href="#work">See my work ↓</a><a class="btn secondary" href="#contact">Work with me</a></div><div class="ticker"><span>2+ years editing</span><span>CapCut</span><span>Premiere Pro</span><span>After Effects</span><span>Short-form · Motion · Long-form</span></div></div></section>
+    <section id="work"><div class="wrap"><div class="section-head"><div><div class="kicker">Selected work</div><h2 class="section-title">The edit is the<br>product.</h2></div><p class="section-desc">A curated selection of projects will live here. Replace these visual placeholders with your strongest finished videos.</p></div><div class="work-grid"><article class="work"><div class="visual"><span class="tag">Short-form</span></div><div class="work-info"><h3>High-retention social edit</h3><p>Hook-driven pacing · captions · sound design</p></div></article><article class="work"><div class="visual"><span class="tag">Motion graphics</span></div><div class="work-info"><h3>Motion-led brand content</h3><p>After Effects · kinetic typography · compositing</p></div></article><article class="work"><div class="visual"><span class="tag">Long-form</span></div><div class="work-info"><h3>Long-form storytelling</h3><p>Structure · pacing · narrative-driven editing</p></div></article><article class="work"><div class="visual"><span class="tag">Content strategy</span></div><div class="work-info"><h3>Content built to perform</h3><p>Format thinking · retention · platform-native edits</p></div></article></div></div></section>
+    <section id="services"><div class="wrap"><div class="section-head"><div><div class="kicker">What I do</div><h2 class="section-title">Editing is more<br>than cutting.</h2></div><p class="section-desc">The goal is not to add more effects. It is to make every second earn its place.</p></div><div class="services"><article class="service"><span class="num">01</span><h3>Short-form</h3><p>Fast, clean edits for Reels, TikTok, Shorts and social campaigns.</p></article><article class="service"><span class="num">02</span><h3>Motion graphics</h3><p>Kinetic typography, transitions, visual effects and polished animation.</p></article><article class="service"><span class="num">03</span><h3>Long-form</h3><p>Structured edits for YouTube, podcasts, interviews and branded content.</p></article></div></div></section>
+    <section id="about"><div class="wrap about"><div><div class="kicker">About me</div><p class="about-copy" style="margin-top:18px">I'm Daviid, a video editor and content strategist focused on making content <span>clearer, sharper and harder to scroll past.</span></p></div><div class="facts"><div class="fact"><span>Experience</span><strong>2+ years</strong></div><div class="fact"><span>Primary tools</span><strong>Premiere · AE · CapCut</strong></div><div class="fact"><span>Focus</span><strong>Social & branded content</strong></div><div class="fact"><span>Availability</span><strong>Freelance projects</strong></div></div></div></section>
+    <section id="contact"><div class="wrap"><div class="contact"><div class="kicker">Have a project?</div><h2>Let's make something people actually watch.</h2><p>Send me your footage, brief or even a rough idea. I'll help turn it into content with a clear creative direction.</p><div class="actions"><a class="btn primary" href="mailto:hello@example.com">Start a project ↗</a><a class="btn secondary" href="#work">View work</a></div></div></div></section>
+  </main>
+  <footer class="wrap"><span>© 2026 Daviid. All rights reserved.</span><span>Video Editor & Content Strategist</span></footer>
+</body>
+</html>
