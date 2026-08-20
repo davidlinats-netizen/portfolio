@@ -1,0 +1,45 @@
+name: Finalize My Approach
+on:
+  push:
+    branches: [main]
+jobs:
+  update:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update portfolio
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          old='''<div class="about-benefits"><div class="kicker">What you get working with me</div><div class="benefit-grid"><article><strong>Fast communication</strong><p>Clear updates, easy collaboration and straightforward feedback.</p></article><article><strong>Platform-native editing</strong><p>Edits built around how audiences actually consume content on each platform.</p></article><article><strong>Creative thinking</strong><p>More than cutting clips. I look at hooks, pacing, structure, motion and retention.</p></article><article><strong>Reliable delivery</strong><p>An organized workflow focused on quality and hitting agreed deadlines.</p></article></div></div>'''
+          new='''<div class="about-benefits"><div class="kicker">My approach</div><div class="benefit-grid"><article data-num="01"><strong>Strategic editing</strong><p>I focus on hooks, pacing, structure and retention so the edit has a clear purpose.</p></article><article data-num="02"><strong>Platform-native content</strong><p>Content shaped for how audiences actually consume TikTok, Reels, Shorts and Meta Ads.</p></article><article data-num="03"><strong>Creative + AI workflow</strong><p>I combine editing, motion, design and AI tools to make production more flexible and efficient.</p></article><article data-num="04"><strong>Clear collaboration</strong><p>A straightforward creative process with clear communication and practical feedback.</p></article></div></div>'''
+          if old not in s:
+              raise SystemExit('My Approach source block not found')
+          s=s.replace(old,new,1)
+          css_old='.benefit-grid article{background:var(--surface);padding:24px;min-height:150px}.benefit-grid strong{font-size:16px}.benefit-grid p{color:var(--muted);font-size:12px;line-height:1.6;margin-top:10px}'
+          css_new='.benefit-grid article{background:var(--surface);padding:24px;min-height:150px;opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease),background .35s}.benefit-grid article::before{content:attr(data-num);display:block;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.14em;margin-bottom:18px}.benefit-grid article.approach-visible{opacity:1;transform:none}.benefit-grid article:hover{background:var(--surface2);transform:translateY(-5px)!important}.benefit-grid strong{font-size:16px}.benefit-grid p{color:var(--muted);font-size:12px;line-height:1.6;margin-top:10px}'
+          if css_old not in s:
+              raise SystemExit('My Approach CSS block not found')
+          s=s.replace(css_old,css_new,1)
+          js_old='''const r=document.getElementById('rotating'),words=['earn attention.','hold attention.','drive action.','tell better stories.'];let i=0;if(!matchMedia('(prefers-reduced-motion:reduce)').matches)setInterval(()=>{r.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-10px)'}],{duration:220,fill:'forwards'}).finished.then(()=>{i=(i+1)%words.length;r.textContent=words[i];r.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'translateY(0)'}],{duration:360,fill:'forwards'})})},3000);'''
+          js_new=js_old+'''\nconst approach=document.querySelectorAll('.benefit-grid article');const approachObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('approach-visible');approachObs.unobserve(e.target)}}),{threshold:.18});approach.forEach((el,n)=>{el.style.transitionDelay=`${n*90}ms`;approachObs.observe(el)});'''
+          if js_old not in s:
+              raise SystemExit('Hero JS block not found')
+          s=s.replace(js_old,js_new,1)
+          p.write_text(s)
+          PY
+      - name: Commit and remove workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Implement animated My Approach section'
+          rm -f .github/workflows/update-my-approach-final.yml
+          git add .github/workflows/update-my-approach-final.yml
+          git commit -m 'Remove one-time My Approach updater' || true
+          git push
