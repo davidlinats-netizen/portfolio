@@ -1,0 +1,46 @@
+name: Finalize portfolio update
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  finalize:
+    if: ${{ !startsWith(github.event.head_commit.message, 'Finalize portfolio update') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply final portfolio changes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text()
+          s = s.replace('autoplay=1&', '')
+          s = s.replace('<span>Availability</span><strong>Freelance projects</strong></div>', '')
+          s = s.replace('Reels · TikTok · Shorts · YouTube</strong>', 'Reels · TikTok · Shorts · YouTube · Meta Ads</strong>')
+          old_tools = '<span>Premiere Pro</span><span>After Effects</span><span>CapCut</span><span>Content Strategy</span>'
+          s = s.replace(old_tools, old_tools + '<span>Meta Ads</span>')
+          old = '<section id="about"><div class="wrap about"><div><div class="kicker">About me</div><p class="about-copy">I\'m Daviid, a video editor and content strategist focused on making content <span>clearer, sharper and harder to scroll past.</span></p><div class="tools"><span>Premiere Pro</span><span>After Effects</span><span>CapCut</span><span>Content Strategy</span></div></div><div class="facts"><div class="fact"><span>Experience</span><strong>2+ years</strong></div><div class="fact"><span>Primary tools</span><strong>Premiere · AE · CapCut</strong></div><div class="fact"><span>Focus</span><strong>Social & branded content</strong></div></div></div></section>'
+          new = '<section id="about"><div class="wrap about about-expanded"><div class="about-main"><div class="kicker">About me</div><p class="about-copy">I\'m Daviid, a video editor and content strategist focused on making content <span>clearer, sharper and harder to scroll past.</span></p><p class="about-detail">I work across short-form, motion graphics, long-form content and paid social, with an editing approach built around strong hooks, clean pacing, visual clarity and platform-native storytelling.</p><div class="tools"><span>Premiere Pro</span><span>After Effects</span><span>CapCut</span><span>Content Strategy</span><span>Meta Ads</span></div></div><div class="facts"><div class="fact"><span>Experience</span><strong>2+ years</strong></div><div class="fact"><span>Primary tools</span><strong>Premiere · AE · CapCut</strong></div><div class="fact"><span>Content</span><strong>Reels · TikTok · Shorts · YouTube · Meta Ads</strong></div><div class="fact"><span>Specialties</span><strong>Short-form · Motion · Long-form</strong></div><div class="fact"><span>Approach</span><strong>Editing + Content Strategy</strong></div></div></div><div class="about-benefits"><div class="kicker">What you get working with me</div><div class="benefit-grid"><article><strong>Fast communication</strong><p>Clear updates, easy collaboration and straightforward feedback.</p></article><article><strong>Platform-native editing</strong><p>Edits built around how audiences actually consume content on each platform.</p></article><article><strong>Creative thinking</strong><p>More than cutting clips. I look at hooks, pacing, structure, motion and retention.</p></article><article><strong>Reliable delivery</strong><p>An organized workflow focused on quality and hitting agreed deadlines.</p></article></div></div></section>'
+          if old in s:
+              s = s.replace(old, new)
+          elif 'about-expanded' not in s:
+              raise SystemExit('Expected About section not found')
+          extra = '.about-expanded{margin-bottom:55px}.about-detail{max-width:620px;color:var(--muted);font-size:14px;line-height:1.7;margin-top:22px}.about-benefits{border-top:1px solid var(--line);padding-top:42px}.benefit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:22px;border:1px solid var(--line);background:var(--line)}.benefit-grid article{background:var(--surface);padding:24px;min-height:150px}.benefit-grid strong{font-size:16px}.benefit-grid p{color:var(--muted);font-size:12px;line-height:1.6;margin-top:10px}.about-main{min-width:0}'
+          if extra not in s:
+              s = s.replace('.services{display:grid;', extra + '.services{display:grid;', 1)
+          s = s.replace('.benefit-grid{grid-template-columns:1fr 1fr}', '.benefit-grid{grid-template-columns:1fr 1fr}')
+          s = s.replace('@media(max-width:800px){.links{display:none}.wrap{', '@media(max-width:800px){.links{display:none}.wrap{', 1)
+          s = s.replace('.work-grid,.services,.about{grid-template-columns:1fr}.work.featured{', '.work-grid,.services,.about{grid-template-columns:1fr}.benefit-grid{grid-template-columns:1fr 1fr}.work.featured{', 1)
+          p.write_text(s)
+          PY
+      - name: Commit and remove workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f .github/workflows/finalize-portfolio.yml
+          git add index.html .github/workflows/finalize-portfolio.yml
+          git diff --cached --quiet && exit 0
+          git commit -m "Finalize portfolio update"
+          git push
