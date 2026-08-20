@@ -1,0 +1,39 @@
+name: Update My Approach
+on:
+  push:
+    branches: [main]
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply portfolio update
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          s=s.replace('.about-benefits{border-top:1px solid var(--line);padding-top:42px}.benefit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:22px;border:1px solid var(--line);background:var(--line)}.benefit-grid article{background:var(--surface);padding:24px;min-height:150px}', '.about-benefits{border-top:1px solid var(--line);padding-top:42px}.benefit-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:22px;border:1px solid var(--line);background:var(--line)}.benefit-grid article{background:var(--surface);padding:24px;min-height:150px;opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease),background .35s,border-color .35s}.benefit-grid article::before{content:attr(data-num);display:block;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.14em;margin-bottom:18px}.benefit-grid article.approach-visible{opacity:1;transform:none}.benefit-grid article:hover{background:var(--surface2);transform:translateY(-5px)!important}', 1)
+          s=s.replace('<div class="about-benefits"><div class="kicker">What you get working with me</div><div class="benefit-grid"><article><strong>Fast communication</strong><p>Clear updates, easy collaboration and straightforward feedback.</p></article><article><strong>Platform-native editing</strong><p>Edits built around how audiences actually consume content on each platform.</p></article><article><strong>Creative thinking</strong><p>More than cutting clips. I look at hooks, pacing, structure, motion and retention.</p></article><article><strong>Reliable delivery</strong><p>An organized workflow focused on quality and hitting agreed deadlines.</p></article></div></div>', '<div class="about-benefits"><div class="kicker">My approach</div><div class="benefit-grid"><article data-num="01"><strong>Strategic editing</strong><p>I focus on hooks, pacing, structure and retention so the edit has a clear purpose.</p></article><article data-num="02"><strong>Platform-native content</strong><p>Content shaped for how audiences actually consume TikTok, Reels, Shorts and Meta Ads.</p></article><article data-num="03"><strong>Creative + AI workflow</strong><p>I combine editing, motion, design and AI tools to make production more flexible and efficient.</p></article><article data-num="04"><strong>Clear collaboration</strong><p>A straightforward creative process with clear communication and practical feedback.</p></article></div></div>', 1)
+          s=s.replace('</script></body></html>', '''const approach=document.querySelectorAll('.benefit-grid article');
+const approachObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('approach-visible');approachObs.unobserve(e.target)}}),{threshold:.18});
+approach.forEach((el,n)=>{el.style.transitionDelay=`${n*90}ms`;approachObs.observe(el)});
+</script></body></html>''', 1)
+          p.write_text(s)
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'Add animated My Approach section'
+          git push
+      - name: Remove updater
+        run: |
+          rm .github/workflows/update-my-approach.yml
+          git add .github/workflows/update-my-approach.yml
+          git commit -m 'Remove one-time My Approach updater'
+          git push
