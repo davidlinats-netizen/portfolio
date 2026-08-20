@@ -1,0 +1,78 @@
+name: One-time approach section update
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '.github/workflows/one-time-approach-update.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update portfolio
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text()
+
+          # Make the marquee cycle through three identical groups so the reset is less perceptible.
+          s = s.replace('@keyframes marquee{to{transform:translateX(-50%)}}', '@keyframes marquee{to{transform:translateX(-33.333333%)}}')
+          marquee = re.search(r'<div class="marquee">.*?</div></div>', s, re.S)
+          if marquee:
+              block = marquee.group(0)
+              groups = re.findall(r'<div class="group">.*?</div>', block, re.S)
+              if groups:
+                  one = groups[0]
+                  new_block = '<div class="marquee"><div class="track">' + one*3 + '</div></div>'
+                  s = s[:marquee.start()] + new_block + s[marquee.end():]
+
+          # Add a restrained animated My Approach section in place of the generic benefits block.
+          old = re.search(r'<div class="about-benefits">.*?</div></section>\s*<section id="tools-showcase">', s, re.S)
+          if old:
+              new = '''<div class="about-benefits approach-section">
+          <div class="approach-head"><div class="kicker">My approach</div><p>Four principles I bring into every edit, from the first cut to the final export.</p></div>
+          <div class="approach-grid">
+            <article class="approach-card"><span class="approach-number">01</span><div><h3>Strategic editing</h3><p>I focus on hooks, pacing, structure and clarity so every second has a purpose.</p></div></article>
+            <article class="approach-card"><span class="approach-number">02</span><div><h3>Platform-native content</h3><p>Edits shaped for how people actually watch Reels, TikTok, Shorts, YouTube and Meta Ads.</p></div></article>
+            <article class="approach-card"><span class="approach-number">03</span><div><h3>Creative + AI workflow</h3><p>I combine editing, motion, design and modern AI tools when they genuinely improve the creative process.</p></div></article>
+            <article class="approach-card"><span class="approach-number">04</span><div><h3>Clear collaboration</h3><p>Simple communication, organized work and a process that keeps feedback easy to act on.</p></div></article>
+          </div>
+        </div></section>
+        <section id="tools-showcase">'''
+              s = s[:old.start()] + new + s[old.end():]
+
+          css = '''
+          .approach-section{margin-top:10px}.approach-head{display:flex;align-items:end;justify-content:space-between;gap:30px;padding-top:42px;border-top:1px solid var(--line)}.approach-head p{max-width:420px;color:var(--muted);font-size:13px}.approach-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}.approach-card{position:relative;min-height:190px;padding:28px;border:1px solid var(--line);border-radius:18px;background:var(--surface);display:flex;gap:22px;overflow:hidden;opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease),border-color .35s,background .35s}.approach-card:before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .7s var(--ease)}.approach-card.visible{opacity:1;transform:none}.approach-card.visible:before{transform:scaleY(1)}.approach-card:nth-child(2){transition-delay:.08s}.approach-card:nth-child(3){transition-delay:.16s}.approach-card:nth-child(4){transition-delay:.24s}.approach-card:hover{transform:translateY(-5px);border-color:var(--muted);background:var(--surface2)}.approach-number{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.1em;flex:0 0 auto}.approach-card h3{font-size:22px;letter-spacing:-.035em;margin:0 0 9px}.approach-card p{color:var(--muted);font-size:13px;line-height:1.65;max-width:360px}
+          @media(max-width:800px){.approach-head{display:block}.approach-head p{margin-top:14px}.approach-grid{grid-template-columns:1fr}.approach-card{min-height:165px}}
+          @media(prefers-reduced-motion:reduce){.approach-card{opacity:1;transform:none}.approach-card:before{transform:scaleY(1)}}
+          '''
+          s = s.replace('</style>', css + '</style>', 1)
+
+          js = '''
+          const approachCards=document.querySelectorAll('.approach-card');
+          if('IntersectionObserver' in window){
+            const approachObserver=new IntersectionObserver((entries,observer)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}})},{threshold:.16});
+            approachCards.forEach(card=>approachObserver.observe(card));
+          }else{approachCards.forEach(card=>card.classList.add('visible'))}
+          '''
+          s = s.replace('</script>', js + '</script>', 1)
+          p.write_text(s)
+          PY
+
+      - name: Commit and remove one-time workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Add animated My Approach section and refine marquee' || true
+          git rm .github/workflows/one-time-approach-update.yml || true
+          git commit -m 'Remove one-time approach workflow' || true
+          git push
