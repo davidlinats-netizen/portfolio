@@ -1,0 +1,41 @@
+name: Finalize video player
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  finalize-video:
+    if: ${{ !startsWith(github.event.head_commit.message, 'Fix inline YouTube player') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fix only the video player
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          s = p.read_text()
+          s = s.replace('controls=0', 'controls=1')
+          s = s.replace('allow="autoplay; encrypted-media"', 'allow="autoplay; encrypted-media; picture-in-picture"')
+          s = s.replace('pointer-events:auto', 'pointer-events:none')
+          s = re.sub(r'(\.video iframe\{[^}]*?)pointer-events:none', r'\1pointer-events:auto', s)
+          s = re.sub(r'(\.video-frame iframe\{[^}]*?)pointer-events:none', r'\1pointer-events:auto', s)
+          p.write_text(s)
+          PY
+          rm -f .github/workflows/fix-video-player.yml .github/workflows/fix-video-final.yml
+
+      - name: Commit final fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows
+          git diff --cached --quiet && exit 0 || git commit -m "Fix inline YouTube player"
+          git push
