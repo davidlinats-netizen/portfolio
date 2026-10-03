@@ -80,3 +80,102 @@
   .filter-button { padding-inline:13px; }
 }
 @media (prefers-reduced-motion:reduce) { .particle-background { display:block; } }
+
+/* Each service has its own miniature motion, with no panel behind the icon. */
+.service-symbol {
+  --symbol-motion:service-film-jump;
+  --symbol-duration:3.8s;
+  position:relative;
+  display:block;
+  width:38px;
+  height:38px;
+  margin-bottom:18px;
+  color:var(--lilac);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),color .3s;
+}
+.services-grid .service-item .service-symbol-glyph { display:block; margin:0; color:inherit; transform-origin:center; transform-box:view-box; }
+.service-symbol-spark,.service-symbol-dot { position:absolute; pointer-events:none; opacity:0; }
+.service-symbol-spark { top:-4px; right:-5px; width:9px; height:9px; background:var(--gold); clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%); }
+.service-symbol-dot { width:3px; height:3px; border-radius:50%; background:currentColor; }
+.service-symbol-dot--one { left:-5px; bottom:8px; }
+.service-symbol-dot--two { right:-6px; bottom:0; color:var(--gold); }
+.service-symbol--sparkle { --symbol-motion:service-star-twirl; --symbol-duration:4.4s; }
+.service-symbol--user { --symbol-motion:service-focus-pulse; --symbol-duration:4s; }
+.service-symbol--house { --symbol-motion:service-home-hop; --symbol-duration:4.6s; }
+.service-symbol--repeat { --symbol-motion:service-recycle-spin; --symbol-duration:5s; }
+.service-symbol--chat { --symbol-motion:service-chat-wiggle; --symbol-duration:4.2s; }
+.service-symbol--user .service-symbol-dot--one { left:14px; bottom:8px; width:14px; height:2px; border-radius:0; color:var(--gold); }
+.service-symbol--chat .service-symbol-dot--one { left:9px; bottom:20px; }
+.service-symbol--chat .service-symbol-dot--two { right:14px; bottom:20px; }
+.service-item:hover .service-symbol { transform:translateY(-3px) scale(1.14); color:var(--gold); }
+@keyframes service-film-jump {
+  0%,55%,100% { transform:translateY(0) rotate(0); }
+  12% { transform:translateY(-5px) rotate(-9deg); }
+  24% { transform:translateY(1px) rotate(7deg); }
+  36% { transform:translateY(-2px) rotate(-3deg); }
+}
+@keyframes service-star-twirl {
+  0%,65%,100% { transform:rotate(0) scale(1); }
+  16% { transform:rotate(-15deg) scale(.88); }
+  34% { transform:rotate(90deg) scale(1.18); }
+  50% { transform:rotate(90deg) scale(1); }
+  64% { transform:rotate(180deg) scale(1); }
+}
+@keyframes service-focus-pulse {
+  0%,65%,100% { transform:scale(1); }
+  18% { transform:scale(.86); }
+  34% { transform:scale(1.16); }
+  47% { transform:scale(.96); }
+  57% { transform:scale(1.04); }
+}
+@keyframes service-home-hop {
+  0%,60%,100% { transform:translateY(0) scale(1,1); }
+  12% { transform:translateY(2px) scale(1.12,.88); }
+  26% { transform:translateY(-7px) scale(.94,1.06); }
+  40% { transform:translateY(1px) scale(1.05,.95); }
+  50% { transform:translateY(-2px) scale(1,1); }
+}
+@keyframes service-recycle-spin {
+  0%,15% { transform:rotate(0); }
+  55%,100% { transform:rotate(360deg); }
+}
+@keyframes service-chat-wiggle {
+  0%,60%,100% { transform:rotate(0) translateY(0); }
+  15% { transform:rotate(-10deg) translateY(-3px); }
+  28% { transform:rotate(9deg) translateY(-3px); }
+  40% { transform:rotate(-5deg) translateY(-1px); }
+  52% { transform:rotate(3deg) translateY(0); }
+}
+@keyframes service-spark-flash {
+  0%,12%,60%,100% { opacity:0; transform:scale(.3) rotate(-30deg); }
+  28% { opacity:1; transform:scale(1.2) rotate(15deg); }
+  43% { opacity:.75; transform:scale(.8) rotate(40deg); }
+}
+@keyframes service-dot-drift {
+  0%,10%,65%,100% { opacity:0; transform:translateY(4px) scale(.4); }
+  25% { opacity:.9; transform:translateY(0) scale(1); }
+  55% { opacity:0; transform:translateY(-10px) scale(.5); }
+}
+@keyframes service-focus-scan {
+  0%,10%,65%,100% { opacity:0; transform:translateY(0); }
+  20% { opacity:1; transform:translateY(-14px); }
+  52% { opacity:.7; transform:translateY(0); }
+}
+@media (prefers-reduced-motion:no-preference) {
+  .services-grid > .reveal-enter .service-item .service-symbol-glyph,
+  .services-grid .service-item:hover .service-symbol-glyph {
+    animation:var(--symbol-motion) var(--symbol-duration) cubic-bezier(.4,0,.2,1) infinite;
+    animation-delay:var(--reveal-delay,0ms);
+  }
+  .reveal-enter .service-symbol-spark { animation:service-spark-flash var(--symbol-duration) ease-in-out infinite; animation-delay:var(--reveal-delay,0ms); }
+  .reveal-enter .service-symbol-dot { animation:service-dot-drift var(--symbol-duration) ease-in-out infinite; }
+  .reveal-enter .service-symbol-dot--two { animation-delay:.35s; }
+  .reveal-enter .service-symbol--user .service-symbol-dot--one { animation-name:service-focus-scan; }
+  .service-item:hover .service-symbol-glyph { filter:drop-shadow(0 0 7px color-mix(in srgb,var(--gold) 45%,transparent)); }
+}
+@media (max-width:767px) {
+  .service-symbol { grid-row:1 / 3; width:35px; margin-top:4px; margin-bottom:0; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .service-item:hover .service-symbol { transform:none; }
+}
