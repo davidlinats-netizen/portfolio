@@ -7,6 +7,7 @@ import "./globals.css";
 import "./studio.css";
 import "./particles.css";
 import "./portrait.css";
+import "./assistant.css";
 
 const display = localFont({ src: "../public/assets/fonts/barlow-condensed-bold.ttf", variable: "--font-display", display: "swap", weight: "700" });
 const body = localFont({ src: "../public/assets/fonts/manrope.ttf", variable: "--font-body", display: "swap", weight: "200 800" });

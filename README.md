@@ -2,7 +2,7 @@
 
 An interactive video editing portfolio built with Next.js, React, and TypeScript.
 
-Features include categorized video samples, an infinite video marquee, an animated particle background with a rocket, meteorites, and an editing timeline, light/dark themes, creative-tool logos, WhatsApp contact, and an optional Groq-powered portfolio assistant.
+Features include categorized video samples, an infinite video marquee, an animated particle background with a rocket, draggable comets, and an editing timeline, light/dark themes, creative-tool logos, WhatsApp contact, and an optional Groq-powered portfolio assistant with a futuristic glass interface.
 
 ## Run locally
 

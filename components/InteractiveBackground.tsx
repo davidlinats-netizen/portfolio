@@ -19,7 +19,7 @@ export function InteractiveBackground() {
     let scroll = window.scrollY;
     let timelineX = 0, timelineY = 0;
     const pointer = { x: -1000, y: -1000, active: false };
-    const meteors = Array.from({ length: 3 }, () => ({ x:0, y:0, offsetX:0, offsetY:0, size:0 }));
+    const comets = Array.from({ length: 3 }, () => ({ x:0, y:0, offsetX:0, offsetY:0, size:0 }));
     let grabbed = -1, grabX = 0, grabY = 0;
     const originalCursor = document.documentElement.style.cursor;
     // Cache soft glow sprites instead of applying expensive shadows to every point.
@@ -102,59 +102,61 @@ export function InteractiveBackground() {
         context.fill();
       }
       drawRocket();
-      drawMeteors(delta);
+      drawComets(delta);
     }
-    function drawMeteors(delta: number) {
+    function drawComets(delta: number) {
       if (!context) return;
       for (let index = 0; index < 3; index++) {
         const phase = (time * (0.038 + index * 0.006) + index * 0.33) % 1;
         const naturalX = width * (0.35 + phase * 0.85);
         const naturalY = height * (-0.15 + phase * 1.25 + index * 0.12);
-        const meteor = meteors[index];
+        const comet = comets[index];
         if (grabbed === index) {
-          meteor.offsetX = pointer.x + grabX - naturalX;
-          meteor.offsetY = pointer.y + grabY - naturalY;
+          comet.offsetX = pointer.x + grabX - naturalX;
+          comet.offsetY = pointer.y + grabY - naturalY;
         } else if (!media.matches) {
-          meteor.offsetX *= Math.exp(-delta * 1.8);
-          meteor.offsetY *= Math.exp(-delta * 1.8);
+          comet.offsetX *= Math.exp(-delta * 1.8);
+          comet.offsetY *= Math.exp(-delta * 1.8);
         }
-        const x = naturalX + meteor.offsetX, y = naturalY + meteor.offsetY;
-        meteor.x = x; meteor.y = y;
-        const size = width < 768 ? 8 : 11 + index * 2;
-        meteor.size = size;
-        const trail = size * (5 + Math.sin(time * 14 + index) * 0.35);
+        const x = naturalX + comet.offsetX, y = naturalY + comet.offsetY;
+        comet.x = x; comet.y = y;
+        const size = width < 768 ? 5 : 6 + index;
+        comet.size = size;
+        const trail = size * (22 + index * 3);
+        const bend = Math.sin(time * .7 + index) * size * 1.8;
+        const tint = light ? "28,115,154" : "132,221,255";
         context.save();
         context.translate(x,y);
         context.rotate(Math.atan2(height * 1.25,width * 0.85));
-        // Layered, pointed flames and cratered rock in a flat cartoon style.
-        context.fillStyle = "#f06432";
-        context.beginPath();
-        context.moveTo(size*.4,-size);
-        context.lineTo(-trail*.64,-size*1.35); context.lineTo(-trail*.42,-size*.55);
-        context.lineTo(-trail,-size*.45); context.lineTo(-trail*.66,size*.05);
-        context.lineTo(-trail*.87,size*.55); context.lineTo(-trail*.43,size*.6);
-        context.lineTo(-trail*.63,size*1.2); context.lineTo(0,size);
-        context.quadraticCurveTo(size*1.5,size*.7,size*.4,-size); context.fill();
-        context.fillStyle = "#ffb33c";
-        context.beginPath(); context.moveTo(0,-size*.8);
-        context.lineTo(-trail*.65,-size*.7); context.lineTo(-trail*.4,-size*.15);
-        context.lineTo(-trail*.8,size*.1); context.lineTo(-trail*.36,size*.35);
-        context.lineTo(-trail*.49,size*.75); context.lineTo(0,size*.8);
-        context.closePath(); context.fill();
-        context.fillStyle = "#ffe477";
-        context.beginPath(); context.moveTo(0,-size*.5); context.lineTo(-trail*.53,0);
-        context.lineTo(-trail*.26,size*.2); context.lineTo(0,size*.55); context.fill();
-        context.fillStyle = "#a48a6e"; context.strokeStyle = "#675a50"; context.lineWidth = 1.5;
-        context.beginPath(); context.ellipse(0,0,size,size*.87,.2,0,Math.PI*2); context.fill(); context.stroke();
-        context.fillStyle = "#6e5d50";
-        for (const [cx,cy,r] of [[-.3,-.25,.29],[.38,.2,.2],[-.25,.45,.14]]) {
-          context.beginPath(); context.arc(cx*size,cy*size,r*size,0,Math.PI*2); context.fill();
+        // A broad, curved dust tail and a finer ion tail fade away from the icy core.
+        const dust = context.createLinearGradient(-trail,0,size,0);
+        dust.addColorStop(0, `rgba(${tint},0)`);
+        dust.addColorStop(.55, `rgba(${tint},${light ? .07 : .12})`);
+        dust.addColorStop(1, `rgba(${tint},${light ? .4 : .65})`);
+        context.fillStyle = dust;
+        context.beginPath(); context.moveTo(size*.7,0);
+        context.bezierCurveTo(-trail*.2,-size*1.3,-trail*.65,-size*4+bend,-trail,-size*3+bend);
+        context.bezierCurveTo(-trail*.6,size*2.5+bend,-trail*.22,size*1.1,size*.7,0);
+        context.fill();
+        for (let strand=0;strand<4;strand++) {
+          context.lineWidth = Math.max(.6, size * (.13 - strand*.02));
+          context.beginPath(); context.moveTo(0,(strand-1.5)*size*.18);
+          context.bezierCurveTo(-trail*.25,(strand-1.5)*size*.35,-trail*.62,bend+strand*size*.45,-trail*(.72+strand*.08),bend+strand*size*.65);
+          context.strokeStyle = dust;
+          context.stroke();
         }
-        context.strokeStyle = "#d2b48b";
-        context.beginPath(); context.arc(0,0,size*.75,-1.5,.1); context.stroke();
-        context.fillStyle = "#ffb33c";
-        for (let spark=0;spark<3;spark++) {
-          context.beginPath(); context.ellipse(-trail*(.35+spark*.24),size*(spark%2 ? -1.5 : 1.3),3,1,-.25,0,Math.PI*2); context.fill();
+        const halo = context.createRadialGradient(0,0,0,0,0,size*4);
+        halo.addColorStop(0, light ? "rgba(44,150,185,.65)" : "rgba(216,247,255,.95)");
+        halo.addColorStop(.25, `rgba(${tint},.45)`);
+        halo.addColorStop(1, `rgba(${tint},0)`);
+        context.fillStyle = halo;
+        context.beginPath(); context.arc(0,0,size*4,0,Math.PI*2); context.fill();
+        context.fillStyle = light ? "#e4fcff" : "#f2fdff";
+        context.beginPath(); context.ellipse(0,0,size*.7,size*.45,0,0,Math.PI*2); context.fill();
+        for (let fleck=0;fleck<8;fleck++) {
+          const drift = (fleck / 8 + time * .16) % 1;
+          context.fillStyle = `rgba(${tint},${(1-drift)*.5})`;
+          context.beginPath(); context.arc(-trail*drift,bend*drift+Math.sin(fleck*2.4+time)*size*drift*2,Math.max(.45,(1-drift)*1.2),0,Math.PI*2); context.fill();
         }
         context.restore();
       }
@@ -213,20 +215,20 @@ export function InteractiveBackground() {
       if (!document.hidden && !media.matches) frame = requestAnimationFrame(tick);
       else draw(0);
     }
-    function hitMeteor(x: number, y: number) { return meteors.findIndex(meteor => Math.hypot(meteor.x-x,meteor.y-y) < meteor.size + 12); }
+    function hitComet(x: number, y: number) { return comets.findIndex(comet => Math.hypot(comet.x-x,comet.y-y) < comet.size + 12); }
     function move(event: PointerEvent) {
       pointer.x = event.clientX; pointer.y = event.clientY; pointer.active = true;
       const interactive = event.target instanceof Element && event.target.closest("a,button,input,textarea,dialog");
-      document.documentElement.style.cursor = grabbed >= 0 ? "grabbing" : !interactive && hitMeteor(pointer.x,pointer.y) >= 0 ? "grab" : originalCursor;
+      document.documentElement.style.cursor = grabbed >= 0 ? "grabbing" : !interactive && hitComet(pointer.x,pointer.y) >= 0 ? "grab" : originalCursor;
       if (media.matches && grabbed >= 0) draw(0);
     }
     function grab(event: PointerEvent) {
       move(event);
       if (event.button !== 0 || event.target instanceof Element && event.target.closest("a,button,input,textarea,dialog")) return;
-      grabbed = hitMeteor(event.clientX,event.clientY);
+      grabbed = hitComet(event.clientX,event.clientY);
       if (grabbed < 0) return;
-      const meteor = meteors[grabbed];
-      grabX = meteor.x-event.clientX; grabY = meteor.y-event.clientY;
+      const comet = comets[grabbed];
+      grabX = comet.x-event.clientX; grabY = comet.y-event.clientY;
       event.preventDefault();
       document.documentElement.style.cursor = "grabbing";
     }
@@ -272,7 +274,7 @@ export function InteractiveBackground() {
     };
   }, []);
   return <div className="interactive-background particle-background hybrid-background" aria-hidden="true">
-    <canvas ref={canvasRef} />
+    <canvas ref={canvasRef} data-celestial="comets" />
     <div ref={timelineRef} className="background-timeline">
       <div className="timeline-header"><span>Picture</span><span>Sound</span><span>Final cut</span></div>
       <div className="timeline-ruler" />

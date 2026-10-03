@@ -103,8 +103,6 @@ html { scroll-padding-top:110px; }
 .whatsapp-button { background:#251b22; color:#fff; }.whatsapp-button:hover { background:#3c2c36; }
 .site-footer { border-color:rgba(37,27,34,.25); color:#553641; margin-top:70px; }
 .site-footer .wordmark { color:var(--accent-text); }
-.assistant-launcher { border-radius:100px; background:var(--surface); box-shadow:0 8px 30px rgba(0,0,0,.2); border:1px solid var(--line); }
-.chat-dialog { border-radius:22px; }
 @keyframes studio-title { from { clip-path:inset(0 0 100%); transform:translateY(28px); } to { clip-path:inset(0); transform:none; } }
 @keyframes studio-arrive { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
 @media (prefers-reduced-motion:no-preference) {
