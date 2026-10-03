@@ -4,7 +4,7 @@ export const siteConfig = {
   headline: "Your ideas Worth watching",
   introduction: "I help brands, businesses, and content creators turn raw footage and ideas into engaging videos designed for social platforms.",
   calendly: "https://calendly.com/davidlinats/client-s-interview",
-  whatsapp: "https://api.whatsapp.com/send?phone=639202783648",
+  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL?.trim() || "",
 } as const;
 
 export const services = [
