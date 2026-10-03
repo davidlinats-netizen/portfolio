@@ -19,6 +19,10 @@ export const services = [
 // All WebP logos supplied by the owner.
 export const toolLogos = [
   {
+    "name": "Vercel",
+    "file": "vercel-light.webp"
+  },
+  {
     "name": "Adobe Premiere Pro",
     "file": "adobe-premiere-pro.webp"
   },
