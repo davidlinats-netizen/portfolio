@@ -36,7 +36,17 @@
 .video-marquee .video-card { width:300px; }
 .gallery-controls .icon-button { border-radius:50%; }
 .work-footer { align-items:center; margin-top:18px; }
-.services-section,.tools-section { background:transparent; }
+.tools-section { background:transparent; }
+.services-section {
+  background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:blur(12px);
+  border:1px solid var(--line);
+}
+:root[data-theme="light"] .services-section { background:color-mix(in srgb,var(--bg) 92%,transparent); }
+@supports not (backdrop-filter:blur(1px)) { .services-section { background:var(--bg); } }
+@media (prefers-reduced-transparency:reduce) {
+  .services-section,:root[data-theme="light"] .services-section { background:var(--bg); backdrop-filter:none; }
+}
 .tools-section,.tools-marquee { border:0; box-shadow:none; }
 .tools-marquee { mask-image:none; }
 .hybrid-background .background-timeline { background:transparent; box-shadow:none; }
