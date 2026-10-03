@@ -29,7 +29,7 @@ export function VideoShowcase() {
     </div>
     <div className="gallery-shell container">
       <Marquee key={category} direction="right" speed={55} pauseOnHover={false} paused={Boolean(videoId)} label="Video samples" className="video-marquee" controllerRef={controllerRef} renderItems={duplicate => filtered.map((video, index) => <VideoCard key={video.id} video={video} index={index} duplicate={duplicate} />)} />
-      <div className="work-footer"><span aria-live="polite">{filtered.length} edits · {category === "All" ? "All categories" : category}</span><div className="gallery-controls"><button className="icon-button" aria-label="Previous videos" onClick={() => browse(-1)}><ArrowLeft size={22} /></button><button className="icon-button" aria-label="Next videos" onClick={() => browse(1)}><ArrowRight size={22} /></button></div></div>
+      <div className="work-footer"><span aria-live="polite">{category === "All" ? "All categories" : category}</span><div className="gallery-controls"><button className="icon-button" aria-label="Previous videos" onClick={() => browse(-1)}><ArrowLeft size={22} /></button><button className="icon-button" aria-label="Next videos" onClick={() => browse(1)}><ArrowRight size={22} /></button></div></div>
     </div>
   </section>;
 }
