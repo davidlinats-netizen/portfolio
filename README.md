@@ -43,11 +43,11 @@ The assistant receives only approved portfolio information. It has no action too
 - `app/globals.css`: themes, responsive composition, and motion.
 - `components/`: individual sections, shared video modal, theme provider, animation helpers, and chat panel.
 
-The latest conversation brief supersedes older proposals in `portfolio.md`: both themes are implemented; the headline is â€œYour ideas Worth watchingâ€; contact details and AI assistant are included. The original Markdown files are preserved unchanged.
+The latest conversation brief supersedes older proposals in `portfolio.md`: both themes are implemented; the headline is “Your ideas Worth watching”; contact details and AI assistant are included. The original Markdown files are preserved unchanged.
 
 ## Media
 
-`Assets/hero.mp4` and `Assets/Video background.mp4` have identical SHA-256 hashes. They contain the same 8-second, 1280Ã—720 illustrated desk scene in a golden landscape. One optimized, audio-free copy is used for the hero, behind theme-specific contrast overlays. A WebP poster was extracted from the supplied video. The original files remain unchanged.
+`Assets/hero.mp4` and `Assets/Video background.mp4` have identical SHA-256 hashes. They contain the same 8-second, 1280×720 illustrated desk scene in a golden landscape. One optimized, audio-free copy is used for the hero, behind theme-specific contrast overlays. A WebP poster was extracted from the supplied video. The original files remain unchanged.
 
 Supplied logos are copied to `public/assets/logos/`. Only provided creative-tool logos appear in the tools strip; WhatsApp is used in contact controls. Video thumbnails downloaded from the 16 supplied YouTube IDs are served locally from `public/assets/posters/`. Fonts are self-hosted using `next/font/local`. No generated imagery stands in for portfolio work.
 
@@ -79,4 +79,3 @@ This workspace is configured for local use. Nothing has been pushed or deployed.
 ## Design guides
 
 The supplied `taste skill.md` guided composition, `frontend design skill.md` guided implementation, and `impeccable.md` guides the final bounded review. The Impeccable launcher and referenced supporting documents were not supplied; no checks from those missing files are claimed.
-
