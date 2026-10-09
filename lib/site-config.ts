@@ -36,7 +36,8 @@ export const toolLogos = [
   },
   {
     "name": "CapCut",
-    "file": "capcut.webp"
+    "file": "capcut.webp",
+    "darkFile": "capcut-light.webp"
   },
   {
     "name": "Claude",
@@ -65,6 +66,11 @@ export const toolLogos = [
   {
     "name": "Google Gemini",
     "file": "google-gemini-icon.webp"
+  },
+  {
+    "name": "HeyGen",
+    "file": "HeyGen_logo-black.webp",
+    "darkFile": "HeyGen_logo-white.webp"
   },
   {
     "name": "Higgsfield",

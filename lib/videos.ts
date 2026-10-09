@@ -18,6 +18,8 @@ export const videos: PortfolioVideo[] = [
   { id: "azH8dobash8", title: "Talking Head", category: "Talking Head" },
   { id: "a1OZ8eJdTI0", title: "UGC AI Edit", category: "AI UGC" },
   { id: "9DseglobOag", title: "UGC AI Edit", category: "AI UGC" },
+  { id: "qqfBLtEgOmM", title: "UGC AI Edit", category: "AI UGC" },
+  { id: "LUX7yAeNL3w", title: "UGC AI Edit", category: "AI UGC" },
 ];
 export function findVideo(id: string) { return videos.find(video => video.id === id); }
 export function validVideoIds(ids: string[]) { return [...new Set(ids)].filter(id => Boolean(findVideo(id))).slice(0, 3); }

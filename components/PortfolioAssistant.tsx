@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import Markdown from "react-markdown";
 import { ChatCircleDots, Play, X, ArrowUp, ArrowUpRight, ArrowCounterClockwise } from "@phosphor-icons/react";
 import { siteConfig } from "@/lib/site-config";
-import { findVideo, validVideoIds } from "@/lib/videos";
+import { findVideo, validVideoIds, videos } from "@/lib/videos";
 import { usePortfolio } from "./PortfolioProvider";
 import { containDialogFocus } from "@/lib/dialog-focus";
 
@@ -88,7 +88,7 @@ export function PortfolioAssistant() {
           <h3>What can I help you create?</h3><p>I’m DAVIID’s AI assistant. Ask about services, explore the work, or share a project idea.</p>
         </div>}
         {availability === "checking" && <p className="chat-notice" role="status">Checking assistant connection…</p>}
-        {availability === "unavailable" && <div className="chat-notice" role="status"><strong>The assistant isn’t connected right now.</strong><p>You can explore all 16 edits on the page, or contact DAVIID through the contact section on the page.</p><button className="text-link" onClick={() => { setAvailability("checking"); setConnectionAttempt(attempt => attempt + 1); }}>Try connection again</button></div>}
+        {availability === "unavailable" && <div className="chat-notice" role="status"><strong>The assistant isn’t connected right now.</strong><p>You can explore all {videos.length} edits on the page, or contact DAVIID through the contact section on the page.</p><button className="text-link" onClick={() => { setAvailability("checking"); setConnectionAttempt(attempt => attempt + 1); }}>Try connection again</button></div>}
         {messages.length === 0 && availability === "ready" && <div className="suggested-questions">{questions.map(question => <button key={question} onClick={() => void send(question)}>{question}<ArrowUpRight size={15} aria-hidden="true" /></button>)}</div>}
         {messages.map((message, index) => <div key={index} className={`chat-message ${message.role}`}><span className="chat-message-author">{message.role === "user" ? "You" : "DAVIID’s assistant"}</span>{message.role === "assistant" ? <div className="chat-markdown"><Markdown skipHtml disallowedElements={["img", "a"]} unwrapDisallowed>{message.content}</Markdown></div> : <p>{message.content}</p>}{message.videoIds?.map(id => { const video = findVideo(id); return video ? <button className="sample-button" key={id} onClick={() => play(id)}><Play size={15} weight="fill" aria-hidden="true" /><span>{video.title}</span><ArrowUpRight size={14} aria-hidden="true" /></button> : null; })}{message.offerContact && <a className="chat-inline-contact" href={siteConfig.whatsapp || siteConfig.calendly} target="_blank" rel="noopener noreferrer">Continue with DAVIID <ArrowUpRight size={14} aria-hidden="true" /></a>}</div>)}
         {loading && <div className="chat-loading" role="status">Thinking…</div>}

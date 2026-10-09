@@ -5,9 +5,9 @@ import { chatRequestSchema, readLimitedJson } from "../lib/chat-validation";
 import { createRateLimiter, boundedLimit } from "../lib/rate-limit";
 
 test("all supplied videos are unique and category counts match the brief", () => {
-  assert.equal(videos.length, 16);
-  assert.equal(new Set(videos.map(video => video.id)).size, 16);
-  assert.deepEqual(categories.map(category => videos.filter(video => video.category === category).length), [2, 5, 4, 3, 2]);
+  assert.equal(videos.length, 18);
+  assert.equal(new Set(videos.map(video => video.id)).size, videos.length);
+  assert.deepEqual(categories.map(category => videos.filter(video => video.category === category).length), [2, 5, 4, 3, 4]);
   assert.ok(videos.every(video => /^[\w-]{11}$/.test(video.id)));
 });
 test("untrusted video recommendations cannot create new sample destinations", () => {
