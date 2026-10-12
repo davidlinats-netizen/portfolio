@@ -20,7 +20,8 @@ export const services = [
 export const toolLogos = [
   {
     "name": "Vercel",
-    "file": "vercel-light.webp"
+    "file": "vercel-black.webp",
+    "darkFile": "vercel-light.webp"
   },
   {
     "name": "Adobe Premiere Pro",
@@ -48,12 +49,9 @@ export const toolLogos = [
     "file": "codex-color.webp"
   },
   {
-    "name": "Dockerised n8n",
-    "file": "dockerised-n8n.webp"
-  },
-  {
     "name": "GitHub",
-    "file": "github-light.webp"
+    "file": "github-black.webp",
+    "darkFile": "github-light.webp"
   },
   {
     "name": "Gmail",
@@ -120,12 +118,4 @@ export const toolLogos = [
     "name": "WhatsApp",
     "file": "whatsapp.webp"
   },
-  {
-    "name": "YouTube",
-    "file": "youtube.webp"
-  },
-  {
-    "name": "Zoom",
-    "file": "zoom.webp"
-  }
 ] as const;
