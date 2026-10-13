@@ -11,7 +11,13 @@ function VideoCard({ video, index, duplicate }: { video: PortfolioVideo; index: 
   const { openVideo } = usePortfolio();
   return <a className="video-card" tabIndex={duplicate ? -1 : 0} href={`https://youtube.com/shorts/${video.id}`} onClick={event => { if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return; event.preventDefault(); openVideo(video.id); }}>
     <span className="sr-only">Play {video.title}, sample {index + 1}</span>
-    <div className="video-thumbnail"><Image src={`/assets/posters/${video.id}.jpg`} alt="" fill sizes="(max-width: 767px) 72vw, 300px" /></div>
+    <div className="video-thumbnail">
+      <Image src={`/assets/posters/${video.id}.jpg`} alt="" fill sizes="(max-width: 767px) 72vw, 300px" />
+      {video.contentWarning && <div className="video-content-warning">
+        <strong><span aria-hidden="true">⚠️</span> CONTENT WARNING</strong>
+        <p>{video.contentWarning}</p>
+      </div>}
+    </div>
     <div className="video-caption"><p>{video.category}</p><ArrowUpRight size={20} aria-hidden="true" /></div>
   </a>;
 }

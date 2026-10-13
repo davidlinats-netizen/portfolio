@@ -1,6 +1,7 @@
 export const categories = ["Promotional Ads", "Real Estate", "Repurposed Content", "Talking Head", "AI UGC"] as const;
 export type Category = (typeof categories)[number];
-export type PortfolioVideo = { id: string; title: string; category: Category };
+export type PortfolioVideo = { id: string; title: string; category: Category; contentWarning?: string };
+const parasiteContentWarning = "This video contains graphic close-up footage of parasites that some viewers may find disturbing or unsettling. Viewer discretion is advised.";
 export const videos: PortfolioVideo[] = [
   { id: "_gAA1AWdWvI", title: "Promotional Ad", category: "Promotional Ads" },
   { id: "CSyAbcsqM3Q", title: "Promotional Ad", category: "Promotional Ads" },
@@ -18,9 +19,9 @@ export const videos: PortfolioVideo[] = [
   { id: "azH8dobash8", title: "Talking Head", category: "Talking Head" },
   { id: "a1OZ8eJdTI0", title: "UGC AI Edit", category: "AI UGC" },
   { id: "9DseglobOag", title: "UGC AI Edit", category: "AI UGC" },
-  { id: "qqfBLtEgOmM", title: "UGC AI Edit", category: "AI UGC" },
-  { id: "LUX7yAeNL3w", title: "UGC AI Edit", category: "AI UGC" },
-  { id: "Va5JbSMhQlg", title: "UGC AI Edit", category: "AI UGC" },
+  { id: "qqfBLtEgOmM", title: "UGC AI Edit", category: "AI UGC", contentWarning: parasiteContentWarning },
+  { id: "LUX7yAeNL3w", title: "UGC AI Edit", category: "AI UGC", contentWarning: parasiteContentWarning },
+  { id: "Va5JbSMhQlg", title: "UGC AI Edit", category: "AI UGC", contentWarning: parasiteContentWarning },
 ];
 export function findVideo(id: string) { return videos.find(video => video.id === id); }
 export function validVideoIds(ids: string[]) { return [...new Set(ids)].filter(id => Boolean(findVideo(id))).slice(0, 3); }
