@@ -149,6 +149,8 @@ dialog::backdrop { background:rgba(0,0,0,.76); }
 .video-modal-content { padding:18px; }
 .dialog-heading { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:15px; }
 .dialog-heading p { font-size:11px; }.dialog-heading h2 { font-family:var(--font-body),sans-serif; font-size:16px; margin-top:4px; }
+.video-dialog .video-close-button { border:0; background:transparent; }
+.video-dialog .video-close-button:hover { color:var(--gold); background:transparent; }
 .video-player { position:relative; margin:auto; width:min(100%,calc((100dvh - 205px) * .5625)); aspect-ratio:9/16; background:#0b0c0e; border-radius:6px; overflow:hidden; }
 .video-player iframe { border:0; width:100%; height:100%; position:absolute; inset:0; }
 .player-loading { position:absolute; inset:0; display:grid; place-items:center; color:#f4f3ec; font-size:12px; }

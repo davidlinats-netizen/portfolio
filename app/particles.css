@@ -39,6 +39,8 @@
 .video-marquee .marquee-set { gap:24px; padding-right:24px; }
 .video-marquee .video-card { width:300px; }
 .gallery-controls .icon-button { border-radius:50%; }
+.gallery-controls .gallery-arrow-button { border:0; border-radius:10px; background:transparent; }
+.gallery-controls .gallery-arrow-button:hover { color:var(--gold); background:transparent; }
 .work-footer { align-items:center; margin-top:18px; }
 .tools-section { background:transparent; }
 .services-section {

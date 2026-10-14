@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, X } from "@phosphor-icons/react";
+import { ArrowUpRight } from "@phosphor-icons/react";
+import { CloseCircleIcon } from "@solar-icons/react/bold-duotone/close-circle";
 import type { PortfolioVideo } from "@/lib/videos";
 import { containDialogFocus } from "@/lib/dialog-focus";
 
@@ -32,7 +33,7 @@ export function VideoModal({ video, onClose }: { video: PortfolioVideo | null; o
   }
   return <dialog ref={ref} className={`video-dialog ${closing ? "is-closing" : ""}`} aria-labelledby="video-title" onKeyDown={containDialogFocus} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === ref.current) close(); }}>
     {video && <div className="video-modal-content">
-      <div className="dialog-heading"><div><p className="muted">{video.category}</p><h2 id="video-title" className="sr-only">{video.title}</h2></div><button className="icon-button" onClick={close} aria-label="Close video" autoFocus><X size={23} /></button></div>
+      <div className="dialog-heading"><div><p className="muted">{video.category}</p><h2 id="video-title" className="sr-only">{video.title}</h2></div><button className="icon-button video-close-button" onClick={close} aria-label="Close video" autoFocus><CloseCircleIcon size={44} secondaryOpacity={0.2} aria-hidden="true" /></button></div>
       <div className="video-player">{!loaded && !closing && <p className="player-loading" role="status">Loading video…</p>}{!closing && <iframe key={video.id} title={video.title} src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&rel=0&playsinline=1`} allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" onLoad={() => setLoaded(true)} />}</div>
       <a className="player-fallback" href={`https://youtube.com/shorts/${video.id}`} target="_blank" rel="noopener noreferrer">Not playing? Watch on YouTube <ArrowUpRight size={16} /></a>
     </div>}

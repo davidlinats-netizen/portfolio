@@ -16,6 +16,7 @@
   "dependencies": {
     "@ai-sdk/groq": "^4.0.53",
     "@phosphor-icons/react": "^2.1.10",
+    "@solar-icons/react": "^2.3.2",
     "ai": "^7.0.123",
     "motion": "^13.4.6",
     "next": "^16.3.7",

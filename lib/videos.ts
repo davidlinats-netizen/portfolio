@@ -20,7 +20,7 @@ export const videos: PortfolioVideo[] = [
   { id: "a1OZ8eJdTI0", title: "UGC AI Edit", category: "AI UGC" },
   { id: "9DseglobOag", title: "UGC AI Edit", category: "AI UGC" },
   { id: "qqfBLtEgOmM", title: "UGC AI Edit", category: "AI UGC", contentWarning: parasiteContentWarning },
-  { id: "LUX7yAeNL3w", title: "UGC AI Edit", category: "AI UGC", contentWarning: parasiteContentWarning },
+  { id: "LUX7yAeNL3w", title: "UGC AI Edit", category: "AI UGC" },
   { id: "Va5JbSMhQlg", title: "UGC AI Edit", category: "AI UGC", contentWarning: parasiteContentWarning },
 ];
 export function findVideo(id: string) { return videos.find(video => video.id === id); }

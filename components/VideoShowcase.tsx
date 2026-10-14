@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "@phosphor-icons/react";
+import { ArrowUpRight } from "@phosphor-icons/react";
+import { SquareDoubleAltArrowLeftIcon } from "@solar-icons/react/bold-duotone/square-double-alt-arrow-left";
+import { SquareDoubleAltArrowRightIcon } from "@solar-icons/react/bold-duotone/square-double-alt-arrow-right";
 import { categories, videos, type Category, type PortfolioVideo } from "@/lib/videos";
 import { usePortfolio } from "./PortfolioProvider";
 import { Marquee } from "./Marquee";
@@ -35,7 +37,7 @@ export function VideoShowcase() {
     </div>
     <div className="gallery-shell container">
       <Marquee key={category} direction="right" speed={55} pauseOnHover={false} paused={Boolean(videoId)} label="Video samples" className="video-marquee" controllerRef={controllerRef} renderItems={duplicate => filtered.map((video, index) => <VideoCard key={video.id} video={video} index={index} duplicate={duplicate} />)} />
-      <div className="work-footer"><span aria-live="polite">{category === "All" ? "All categories" : category}</span><div className="gallery-controls"><button className="icon-button" aria-label="Previous videos" onClick={() => browse(-1)}><ArrowLeft size={22} /></button><button className="icon-button" aria-label="Next videos" onClick={() => browse(1)}><ArrowRight size={22} /></button></div></div>
+      <div className="work-footer"><span aria-live="polite">{category === "All" ? "All categories" : category}</span><div className="gallery-controls"><button className="icon-button gallery-arrow-button" aria-label="Previous videos" onClick={() => browse(-1)}><SquareDoubleAltArrowLeftIcon size={44} secondaryOpacity={0.2} aria-hidden="true" /></button><button className="icon-button gallery-arrow-button" aria-label="Next videos" onClick={() => browse(1)}><SquareDoubleAltArrowRightIcon size={44} secondaryOpacity={0.2} aria-hidden="true" /></button></div></div>
     </div>
   </section>;
 }
